@@ -22,6 +22,9 @@ const getEvents = function () {
       }
     })
     .then((arrayOfEvents) => {
+      // qui il caricamento degli eventi si è concluso
+      // TOLGO lo spinner dalla pagina
+      document.getElementById('spinner-container').classList.add('d-none')
       console.log('ARRAYOFEVENTS', arrayOfEvents)
       // recupero la riga dove appenderemo le colonne con le cards
       const row = document.getElementById('events-row')

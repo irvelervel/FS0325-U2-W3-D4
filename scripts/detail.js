@@ -31,16 +31,57 @@ fetch(endpoint + '/' + eventId)
   })
   .then((concertDetails) => {
     console.log('dettagli', concertDetails)
+    // nascondo lo spinner
+    document.getElementById('spinner-container').classList.add('d-none')
+    // 3) popolare la pagina con i dettagli appena recuperati
+    document.querySelector('.card .card-title').innerText = concertDetails.name
+    document.querySelector('.card .card-text:nth-of-type(1)').innerText =
+      concertDetails.description
+    document.querySelector('.card .card-text:nth-of-type(2)').innerText =
+      new Date(concertDetails.time).toLocaleDateString() +
+      ' ' +
+      new Date(concertDetails.time).toLocaleTimeString() +
+      ' - ' +
+      concertDetails.price +
+      '€'
   })
   .catch((err) => {
     console.log('ERRORE', err)
   })
-// 3) popolare la pagina con i dettagli appena recuperati
 
+const deleteConcert = function () {
+  // con questa funzione chiedo all'API di eliminare questa risorsa
+  fetch(endpoint + '/' + eventId, {
+    method: 'DELETE',
+  })
+    .then((response) => {
+      if (response.ok) {
+        // l'operazione di DELETE è andata a buon fine!
+        alert('ELIMINAZIONE AVVENUTA CON SUCCESSO')
+        // visto che la risorsa non esiste più, riportiamo l'utente in home
+        location.assign('/index.html')
+      } else {
+        throw new Error('Errore in fase di eliminazione')
+      }
+    })
+    .catch((err) => {
+      console.log('ERRORE', err)
+    })
+}
+
+// fase di modifica
+const editConcert = function () {
+  // dobbiamo re-direzionare l'utente alla pagina backoffice con un parametro nell'URL
+  location.assign('/backoffice.html?eventId=' + eventId)
+}
 // NOTA PER GLI URL DELLE API REST
 // CHIAMATE GET:
 // https://striveschool-api.herokuapp.com/api/agenda
 // CHIAMATE POST:
 // https://striveschool-api.herokuapp.com/api/agenda
 // CHIAMATA GET PER UN SINGOLO ELEMENTO DELL'API:
+// https://striveschool-api.herokuapp.com/api/agenda/_id
+// CHIAMATA DELETE:
+// https://striveschool-api.herokuapp.com/api/agenda/_id
+// CHIAMATA PUT:
 // https://striveschool-api.herokuapp.com/api/agenda/_id
